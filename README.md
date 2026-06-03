@@ -6,6 +6,8 @@
 It scans font files, finds defined Unicode glyphs, and opens a local web view for
 typing samples or browsing a glyph map.
 
+![](support/screenshot.png)
+
 ## Install
 
 ### With eget
