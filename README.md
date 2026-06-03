@@ -1,5 +1,7 @@
 # Fontview
 
+![repocard](https://repocard.dannyben.com/svg/fontview.svg)
+
 `fontview` is a small CLI for inspecting icon, dingbat, emoji, and display fonts.
 It scans font files, finds defined Unicode glyphs, and opens a local web view for
 typing samples or browsing a glyph map.
@@ -15,8 +17,8 @@ eget dannyben/fontview
 ### From GitHub Releases
 
 Download the archive for your operating system and CPU from the repository's
-Releases page, extract it, and put the `fontview` binary somewhere on your
-`PATH`.
+[Releases page](https://github.com/DannyBen/fontview/releases), extract it,
+and put the `fontview` binary somewhere on your `PATH`.
 
 ### From Source
 
