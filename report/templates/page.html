@@ -10,23 +10,12 @@
   <header class="app-header">
     <div class="toolbar">
       <div class="segmented" aria-label="View">
-        <button class="segmented-button is-active" type="button" data-view="type">Type</button>
-        <button class="segmented-button" type="button" data-view="map">Map</button>
+        <button class="segmented-button" type="button" data-view="type">Type</button>
+        <button class="segmented-button is-active" type="button" data-view="map">Map</button>
       </div>
       <select class="font-select" id="fontSelect" aria-label="Font"></select>
       <select class="compact-select" id="categorySelect" aria-label="Category"></select>
-      <select class="compact-select" id="sizeSelect" aria-label="Size">
-        <option value="24">24px</option>
-        <option value="28">28px</option>
-        <option value="34">34px</option>
-        <option value="44">44px</option>
-        <option value="56">56px</option>
-        <option value="72" selected>72px</option>
-        <option value="96">96px</option>
-        <option value="128">128px</option>
-        <option value="160">160px</option>
-        <option value="192">192px</option>
-      </select>
+      <input class="compact-input" id="sizeInput" type="number" min="8" max="320" step="5" value="72" aria-label="Size">
       <select class="compact-select" id="weightSelect" aria-label="Weight">
         <option value="100">100</option>
         <option value="200">200</option>
@@ -45,10 +34,10 @@
     </div>
   </header>
   <main>
-    <section class="view is-active" id="typeView" data-view-panel="type">
+    <section class="view" id="typeView" data-view-panel="type">
       <textarea id="sampleText" spellcheck="false">The quick brown fox jumps over 12345.</textarea>
     </section>
-    <section class="view" id="mapView" data-view-panel="map">
+    <section class="view is-active" id="mapView" data-view-panel="map">
       <div id="content"></div>
     </section>
   </main>

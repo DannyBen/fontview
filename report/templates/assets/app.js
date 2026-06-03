@@ -4,11 +4,13 @@ style.textContent = fonts.map((font) => {
 }).join("\n");
 document.head.append(style);
 
+const allUngroupedCategory = "__all_ungrouped__";
+
 const state = {
-  view: "type",
+  view: "map",
   font: fonts[0]?.id,
-  category: "All",
-  size: "72",
+  category: allUngroupedCategory,
+  size: 72,
   weight: "400",
   bold: false,
   italic: false,
@@ -20,7 +22,7 @@ const els = {
   viewPanels: document.querySelectorAll("[data-view-panel]"),
   font: document.querySelector("#fontSelect"),
   category: document.querySelector("#categorySelect"),
-  size: document.querySelector("#sizeSelect"),
+  size: document.querySelector("#sizeInput"),
   weight: document.querySelector("#weightSelect"),
   bold: document.querySelector("#boldButton"),
   italic: document.querySelector("#italicButton"),
@@ -46,7 +48,7 @@ for (const button of els.viewButtons) {
 }
 els.font.addEventListener("change", () => {
   state.font = els.font.value;
-  state.category = "All";
+  state.category = allUngroupedCategory;
   render();
 });
 els.category.addEventListener("change", () => {
@@ -54,8 +56,13 @@ els.category.addEventListener("change", () => {
   renderGlyphs();
 });
 els.size.addEventListener("change", () => {
-  state.size = els.size.value;
-  applyFontSettings();
+  setSize(els.size.value);
+});
+els.size.addEventListener("blur", () => {
+  els.size.value = String(state.size);
+});
+els.size.addEventListener("keydown", (event) => {
+  handleSizeShortcut(event);
 });
 els.weight.addEventListener("change", () => {
   state.weight = els.weight.value;
@@ -75,6 +82,15 @@ els.search.addEventListener("input", () => {
   state.query = els.search.value.trim().toLowerCase();
   renderGlyphs();
 });
+document.addEventListener("keydown", (event) => {
+  if (event.target === els.size) {
+    return;
+  }
+  if (isEditableTarget(event.target)) {
+    return;
+  }
+  handleSizeShortcut(event);
+});
 
 function activeFont() {
   return fonts.find((font) => font.id === state.font) ?? fonts[0];
@@ -86,17 +102,23 @@ function render() {
   applyFontSettings();
   els.meta.textContent = `${font.glyphs.length.toLocaleString()} glyphs`;
 
-  const categories = ["All", ...new Set(font.glyphs.map((glyph) => glyph.category))];
+  const categories = [
+    { value: allUngroupedCategory, label: "All (Ungrouped)" },
+    { value: "All", label: "All" },
+    ...Array.from(new Set(font.glyphs.map((glyph) => glyph.category)), (category) => {
+      return { value: category, label: category };
+    })
+  ];
   els.category.replaceChildren(...categories.map((category) => {
     const option = document.createElement("option");
-    option.value = category;
-    option.textContent = category;
-    option.selected = category === state.category;
+    option.value = category.value;
+    option.textContent = category.label;
+    option.selected = category.value === state.category;
     return option;
   }));
-  if (!categories.includes(state.category)) {
-    state.category = "All";
-    els.category.value = "All";
+  if (!categories.some((category) => category.value === state.category)) {
+    state.category = allUngroupedCategory;
+    els.category.value = allUngroupedCategory;
   }
   renderView();
   renderGlyphs();
@@ -125,14 +147,56 @@ function applyFontSettings() {
   document.documentElement.style.setProperty("--sample-style", style);
 }
 
+function setSize(value) {
+  const next = Number(value);
+  if (!Number.isFinite(next)) {
+    els.size.value = String(state.size);
+    return;
+  }
+  state.size = clamp(Math.round(next), 8, 320);
+  els.size.value = String(state.size);
+  applyFontSettings();
+}
+
+function handleSizeShortcut(event) {
+  if (event.altKey || event.ctrlKey || event.metaKey) {
+    return;
+  }
+  if (event.key === "+" || event.code === "NumpadAdd") {
+    event.preventDefault();
+    setSize(state.size + 5);
+  } else if (event.key === "-" || event.code === "Minus" || event.code === "NumpadSubtract") {
+    event.preventDefault();
+    setSize(state.size - 5);
+  }
+}
+
+function isEditableTarget(target) {
+  return target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement ||
+    target?.isContentEditable;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 function renderGlyphs() {
   const font = activeFont();
   const query = state.query;
   const glyphs = font.glyphs.filter((glyph) => {
-    const matchesCategory = state.category === "All" || glyph.category === state.category;
+    const matchesCategory = state.category === allUngroupedCategory ||
+      state.category === "All" ||
+      glyph.category === state.category;
     const haystack = `${glyph.char} ${glyph.code} ${glyph.category} ${glyph.name}`.toLowerCase();
     return matchesCategory && (!query || haystack.includes(query));
   });
+
+  if (state.category === allUngroupedCategory) {
+    els.content.replaceChildren(section("All", glyphs));
+    return;
+  }
 
   const grouped = groupBy(glyphs, (glyph) => glyph.category);
   els.content.replaceChildren(...Array.from(grouped, ([category, items]) => section(category, items)));

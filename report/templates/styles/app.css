@@ -99,6 +99,7 @@ textarea {
 
 .font-select,
 .compact-select,
+.compact-input,
 .search-input,
 .style-button {
   border: 1px solid var(--line);
@@ -110,6 +111,7 @@ textarea {
 
 .font-select,
 .compact-select,
+.compact-input,
 .search-input {
   padding: 0 9px;
 }
@@ -121,6 +123,11 @@ textarea {
 
 .compact-select {
   flex: 0 0 auto;
+}
+
+.compact-input {
+  flex: 0 0 72px;
+  width: 72px;
 }
 
 .search-input {
