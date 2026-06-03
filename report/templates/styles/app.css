@@ -1,0 +1,250 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f6f3ee;
+  --text: #1f2328;
+  --muted: #667085;
+  --line: #d8d2c8;
+  --panel: #fffdfa;
+  --accent: #006d77;
+  --accent-ink: #ffffff;
+  --tile: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #181a1b;
+    --text: #f2efe8;
+    --muted: #a7b0b8;
+    --line: #34383c;
+    --panel: #202326;
+    --accent: #57c7b6;
+    --accent-ink: #10201e;
+    --tile: #24282c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 8px;
+  overflow-x: auto;
+}
+
+.meta {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.segmented {
+  display: inline-flex;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.segmented-button,
+.style-button {
+  border: 0;
+  background: var(--tile);
+  color: var(--text);
+  min-height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.segmented-button + .segmented-button {
+  border-left: 1px solid var(--line);
+}
+
+.segmented-button.is-active,
+.style-button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.font-select,
+.compact-select,
+.search-input,
+.style-button {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--tile);
+  color: var(--text);
+  min-height: 32px;
+}
+
+.font-select,
+.compact-select,
+.search-input {
+  padding: 0 9px;
+}
+
+.font-select {
+  flex: 1 1 auto;
+  min-width: 220px;
+}
+
+.compact-select {
+  flex: 0 0 auto;
+}
+
+.search-input {
+  flex: 0 1 220px;
+  min-width: 160px;
+}
+
+.style-button {
+  flex: 0 0 32px;
+  width: 32px;
+  padding: 0;
+  font-weight: 700;
+}
+
+.style-button.italic {
+  font-style: italic;
+}
+
+main {
+  padding-top: 45px;
+}
+
+.view {
+  display: none;
+}
+
+.view.is-active {
+  display: block;
+}
+
+#typeView {
+  min-height: calc(100vh - 45px);
+}
+
+#sampleText {
+  display: block;
+  width: 100%;
+  min-height: calc(100vh - 45px);
+  border: 0;
+  outline: none;
+  resize: none;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--active-font), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--sample-size, 28px);
+  font-weight: var(--sample-weight, 400);
+  font-style: var(--sample-style, normal);
+  line-height: 1.35;
+  padding: 24px;
+}
+
+#mapView {
+  padding: 16px;
+}
+
+.section {
+  margin: 0 0 28px;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 10px;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--glyph-size, 34px) + 20px);
+  min-height: calc(var(--glyph-size, 34px) + 20px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--tile);
+  color: var(--text);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.glyph:hover {
+  border-color: var(--accent);
+}
+
+.glyph-symbol {
+  display: block;
+  font-family: var(--active-font), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--glyph-size, 34px);
+  font-weight: var(--glyph-weight, 400);
+  font-style: var(--glyph-style, normal);
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 3;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 9px 12px;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
