@@ -8,14 +8,9 @@ typing samples or browsing a glyph map.
 
 ### With eget
 
-Replace `OWNER` with the GitHub owner for this repository:
-
 ```bash
-eget OWNER/fontview --to ~/bin/fontview
+eget dannyben/fontview
 ```
-
-If `~/bin` is already on your `PATH`, this installs `fontview` as a normal
-command.
 
 ### From GitHub Releases
 
@@ -26,7 +21,7 @@ Releases page, extract it, and put the `fontview` binary somewhere on your
 ### From Source
 
 ```bash
-go install github.com/OWNER/fontview@latest
+go install github.com/dannyben/fontview@latest
 ```
 
 ## Usage
@@ -74,20 +69,3 @@ fontview --addr 127.0.0.1:9000
 - `.woff2`
 
 Hidden directories such as `.git` are skipped.
-
-## Development
-
-Common commands:
-
-```bash
-go test ./...
-go run . --help
-go run . --html
-go run .
-```
-
-Release flow:
-
-1. Push a tag like `v0.1.0`.
-2. GitHub Actions runs the release workflow.
-3. GoReleaser publishes archives and `checksums.txt` to GitHub Releases.
